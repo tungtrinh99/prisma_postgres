@@ -17,6 +17,8 @@ model User {
   lastName  String
   avatar    String?
   Message   Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Woman {
@@ -26,6 +28,8 @@ model Woman {
   username  String    @unique
   avatar    String?
   Message   Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Message {
@@ -35,4 +39,6 @@ model Message {
   woman_id Int
   user_id  Int
   message  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

@@ -27,11 +27,30 @@ app.get('/users/:id', async (req, res) => {
 })
 // woman
 app.get('/women', async (req, res) => {
-    const women = await prisma.woman.findMany()
+
+    const women = await prisma.woman.findMany({
+        include: {
+            _count: {
+                select: { Message: true },
+            },
+        },
+        orderBy: {
+            Message: {
+                _count: 'desc'
+            }
+        }
+    })
     res.json(women)
 })
 app.get('/women/:id', async (req, res) => {
     const woman = await prisma.woman.findUnique({
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            Message: true,
+        },
         where: {
             id: Number(req.params.id),
         },
