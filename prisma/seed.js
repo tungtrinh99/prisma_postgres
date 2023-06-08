@@ -25,7 +25,6 @@ async function main() {
     },
   })
   
-  console.log({ tungTrinh, yenNhi })
 }
 main()
   .then(async () => {
