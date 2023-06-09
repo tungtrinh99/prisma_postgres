@@ -95,9 +95,6 @@ exports.womanController = () => {
                     data: woman,
                 })
             }
-
-            res.json(woman)
-
         } catch (e) {
             res.status(500).json({
                 error: e,
