@@ -40,6 +40,12 @@ const upload = multer({
     }
 });
 
+//
+router.get('/', (req, res) => {
+    res.json({
+        message: "Welcome to API v1"
+    })
+})
 // user
 router.get('/users', userController().index);
 router.get('/users/:id', userController().detail);
