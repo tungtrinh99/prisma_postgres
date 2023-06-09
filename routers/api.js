@@ -40,6 +40,11 @@ const upload = multer({
     }
 });
 
+router.get('/', (req, res) => {
+    res.json({
+        message: "Hello World"
+    })
+});
 // user
 router.get('/users', userController().index);
 router.get('/users/:id', userController().detail);
