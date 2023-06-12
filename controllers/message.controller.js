@@ -7,11 +7,24 @@ exports.messageController = () => {
     return {
         index: async (req, res) => {
             try {
-                const messages = await prisma.message.findMany({
-                    orderBy: {
-                        id: 'desc'
-                    }
-                })
+                const womanId = Number(req.query.woman_id);
+                let messages;
+                if (womanId) {
+                    messages = await prisma.message.findMany({
+                        where: {
+                            woman_id: womanId
+                        },
+                        orderBy: {
+                            id: 'desc'
+                        }
+                    })
+                } else {
+                    messages = await prisma.message.findMany({
+                        orderBy: {
+                            id: 'desc'
+                        }
+                    })
+                }
                 res.json(messages);
             } catch (err) {
                 res.status(500).json(err);
