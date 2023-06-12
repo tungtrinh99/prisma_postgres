@@ -8,6 +8,10 @@ const {userController} = require('../controllers/user.controller');
 const {womanController} = require('../controllers/woman.controller');
 const {messageController} = require('../controllers/message.controller');
 
+const {validateWomanBodyRequest} = require('../validations/woman.validation');
+const {validateMessageBodyRequest} = require('../validations/message.validation');
+const {validateUserBodyRequest} = require('../validations/user.validation');
+
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         fs.mkdir(path.join(path.resolve(), "/tmp"), (err) => {
@@ -48,11 +52,13 @@ router.get('/', (req, res) => {
 // user
 router.get('/users', userController().index);
 router.get('/users/:id', userController().detail);
+router.post('/users', validateUserBodyRequest, userController().create);
 // woman
 router.get('/women', womanController().index);
 router.get('/women/:id', womanController().detail);
-router.post('/women', womanController().create);
+router.post('/women', validateWomanBodyRequest, womanController().create);
 router.post('/women/:id', upload.single('file'), womanController().update);
 // message
 router.get('/messages', messageController().index);
+router.post('/messages', validateMessageBodyRequest, messageController().create);
 module.exports = router;

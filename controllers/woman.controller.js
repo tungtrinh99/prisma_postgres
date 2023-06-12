@@ -3,6 +3,7 @@ const fs = require("fs");
 const dotenv = require('dotenv');
 dotenv.config();
 const {PrismaClient} = require('@prisma/client');
+const {validationResult} = require("express-validator");
 
 exports.womanController = () => {
     const prisma = new PrismaClient();
@@ -48,16 +49,29 @@ exports.womanController = () => {
         }
 
     }
-    const create = async (req, res) => {
-        const {firstName, lastName, username} = req.body;
-        const woman = prisma.woman.create({
-            data: {
-                firstName,
-                lastName,
-                username
+    const create = async (req, res, next) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    success: false,
+                    errors: errors.array(),
+                });
             }
-        })
-        res.json(woman);
+
+            const {firstName, lastName, username} = req.body;
+            const woman = await prisma.woman.create({
+                data: {
+                    firstName,
+                    lastName,
+                    username
+                }
+            })
+            res.json(woman);
+        } catch (e) {
+            next(e);
+        }
+
     }
     const update = async (req, res) => {
         const womanId = Number(req.params.id);
