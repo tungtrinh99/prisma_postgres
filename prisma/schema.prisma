@@ -1,24 +1,27 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
+
 model User {
-  id        Int       @id @default(autoincrement())
-  firstName String
-  lastName  String
-  avatar    String?
-  Message   Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id          Int           @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  username    String        @unique
+  avatar      String?
+  email       String        @unique
+  passwordHash String
+  refreshToken  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  AccessToken AccessToken[]
+  Message     Message[]
 }
 
 model Woman {
@@ -27,18 +30,28 @@ model Woman {
   lastName  String
   username  String    @unique
   avatar    String?
-  Message   Message[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  Message   Message[]
 }
 
 model Message {
-  id       Int    @id @default(autoincrement())
-  woman    Woman? @relation(fields: [woman_id], references: [id])
-  user     User?  @relation(fields: [user_id], references: [id])
-  woman_id Int
-  user_id  Int
-  message  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  woman_id  Int
+  user_id   Int
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  woman     Woman    @relation(fields: [woman_id], references: [id])
+}
+
+model AccessToken {
+  id        Int      @id @default(autoincrement())
+  token     String
+  user_id   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresIn DateTime
+  user      User     @relation(fields: [user_id], references: [id])
 }

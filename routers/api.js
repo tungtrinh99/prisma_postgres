@@ -12,6 +12,8 @@ const {validateWomanBodyRequest} = require('../validations/woman.validation');
 const {validateMessageBodyRequest} = require('../validations/message.validation');
 const {validateUserBodyRequest} = require('../validations/user.validation');
 
+const { checkToken } = require('../middlewares/checkToken');
+
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         fs.mkdir(path.join(path.resolve(), "/tmp"), (err) => {
@@ -49,12 +51,16 @@ router.get('/', (req, res) => {
         message: "Hello World"
     })
 });
+// login
+router.post('/signup', userController().signup);
+router.post('/login', userController().login);
+router.post('/refresh-token', userController().refreshToken);
 // user
 router.get('/users', userController().index);
 router.get('/users/:id', userController().detail);
 router.post('/users', validateUserBodyRequest, userController().create);
 // woman
-router.get('/women', womanController().index);
+router.get('/women', checkToken, womanController().index);
 router.get('/women/:id', womanController().detail);
 router.post('/women', validateWomanBodyRequest, womanController().create);
 router.post('/women/:id', upload.single('file'), womanController().update);
