@@ -1,18 +1,34 @@
+const jwt = require("jsonwebtoken")
 
-let jwt = require('jsonwebtoken');
 const checkToken = (req, res, next) => {
-    let accessToken = req.headers.authorization.split(' ')[1];
-    let decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    let expires = decoded.exp;
-    console.log('expires', expires)
-    let now = Math.floor(Date.now() / 1000);
-    if (expires < now) {
-        return res.status(401).json({ error: 'Phiên đăng nhập đã hết hạn.' });
-    }
-    console.log(req.headers.authorization.split(' ')[1])
-    next();
-};
+	if (req.headers.authorization) {
+		try {
+			const authorization = req.headers.authorization.split(" ")
+			if (authorization[0] !== "Bearer") {
+
+				return res.status(401).json({ error: "Không tìm thấy token." })
+			}
+			const accessToken = authorization[1]
+			const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
+			jwt.verify(accessToken, accessTokenSecret)
+			// const expires = decoded.exp;
+			// const now = Math.floor(Date.now() / 1000);
+			// if (expires < now) {
+			//     return res.status(401).json({ error: 'Phiên đăng nhập đã hết hạn.' });
+			// }
+
+			return next()
+		} catch (e) {
+
+			return res.status(401).json({ error: "Forbidden: " + e.message })
+		}
+	} else {
+
+		return res.status(401).json({ error: "Không tìm thấy token." })
+	}
+
+}
 
 module.exports = {
-    checkToken
+	checkToken
 }

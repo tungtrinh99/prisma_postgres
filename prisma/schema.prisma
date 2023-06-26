@@ -17,10 +17,8 @@ model User {
   avatar      String?
   email       String        @unique
   passwordHash String
-  refreshToken  String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  AccessToken AccessToken[]
   Message     Message[]
 }
 
@@ -46,12 +44,3 @@ model Message {
   woman     Woman    @relation(fields: [woman_id], references: [id])
 }
 
-model AccessToken {
-  id        Int      @id @default(autoincrement())
-  token     String
-  user_id   Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  expiresIn DateTime
-  user      User     @relation(fields: [user_id], references: [id])
-}
