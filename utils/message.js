@@ -8,18 +8,23 @@ const messages = {
             password: {
                 required: "Mật khẩu không được để trống.",
                 invalid: "Mật khẩu không hợp lệ.",
+                length: "Mật khẩu phải có ít nhất 8 ký tự.",
             },
             firstName: {
                 required: "Họ không được để trống.",
-                isString: "Họ phải là chuỗi.",
+                invalid: "Họ phải là chuỗi.",
             },
             lastName: {
                 required: "Tên không được để trống.",
-                isString: "Tên phải là chuỗi.",
+                invalid: "Tên phải là chuỗi.",
             },
             username: {
                 required: "Username không được để trống.",
-                isString: "Username là chuỗi.",
+                invalid: "Username không hợp lệ.",
+            },
+            refreshToken: {
+                required: "Refresh token không được để trống.",
+                invalid: "Refresh token không hợp lệ.",
             }
         }
     },

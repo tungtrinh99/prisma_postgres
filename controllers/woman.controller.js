@@ -1,4 +1,4 @@
-const cloudinary = require("../util/cloudinary")
+const cloudinary = require("../utils/cloudinary")
 const fs = require("fs")
 const dotenv = require("dotenv")
 dotenv.config()

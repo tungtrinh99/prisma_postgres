@@ -10,7 +10,7 @@ const {messageController} = require("../controllers/message.controller")
 
 const {validateWomanBodyRequest} = require("../validations/woman.validation")
 const {validateMessageBodyRequest} = require("../validations/message.validation")
-const {validateSignupBodyRequest} = require("../validations/auth.validation")
+const {validateSignupBodyRequest, validateLoginBodyRequest} = require("../validations/auth.validation")
 
 const { checkToken } = require("../middlewares/checkToken")
 
@@ -54,7 +54,7 @@ router.get("/", (req, res) => {
 // login
 
 router.post("/signup", validateSignupBodyRequest, userController().signup)
-router.post("/login", userController().login)
+router.post("/login", validateLoginBodyRequest, userController().login)
 router.post("/refresh-token", userController().refreshToken)
 // router.post('/logout', userController().logout);
 // check token

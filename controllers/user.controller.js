@@ -2,6 +2,7 @@ const {PrismaClient} = require("@prisma/client")
 const {validationResult} = require("express-validator")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
+
 const generateAccessToken = (email) => {
 	const accessToken = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
 	return accessToken
@@ -18,6 +19,16 @@ exports.userController = () => {
 
 	return {
 		signup: async (req, res) => {
+
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({
+					success: false,
+					errors: errors.array(),
+				})
+			}
+
 			const { email, password, username, firstName, lastName } = req.body
 
 			try {
@@ -38,6 +49,15 @@ exports.userController = () => {
 			}
 		},
 		login: async (req, res) => {
+
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({
+					success: false,
+					errors: errors.array(),
+				})
+			}
 			const { email, password } = req.body
 
 			try {
@@ -66,6 +86,15 @@ exports.userController = () => {
 			}
 		},
 		refreshToken: async (req, res) => {
+			const errors = validationResult(req)
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({
+					success: false,
+					errors: errors.array(),
+				})
+			}
+
 			const { email, refreshToken } = req.body
 
 			try {
