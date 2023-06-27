@@ -60,31 +60,30 @@ exports.userController = () => {
 			}
 			const { email, password } = req.body
 
-			// try {
-			// 	const user = await prisma.user.findUnique({
-			// 		where: {
-			// 			email,
-			// 		},
-			// 	})
-			//
-			// 	if (!user) {
-			// 		return res.status(401).json({ error: "Tài khoản không tồn tại." })
-			// 	}
-			//
-			// 	const passwordMatch = await bcrypt.compare(password, user.passwordHash)
-			//
-			// 	if (!passwordMatch) {
-			// 		return res.status(401).json({ error: "Tài khoản hoặc mật khẩu không đúng." })
-			// 	}
+			try {
+				const user = await prisma.user.findUnique({
+					where: {
+						email,
+					},
+				})
+
+				if (!user) {
+					return res.status(401).json({ error: "Tài khoản không tồn tại." })
+				}
+
+				const passwordMatch = await bcrypt.compare(password, user.passwordHash)
+
+				if (!passwordMatch) {
+					return res.status(401).json({ error: "Tài khoản hoặc mật khẩu không đúng." })
+				}
 
 				const accessToken = generateAccessToken(email)
 				const refreshToken = generateRefreshToken(email)
-				res.json({ message: "Đăng nhập thành công.", accessToken, refreshToken })
 
-				// res.json({ message: "Đăng nhập thành công.", user, accessToken, refreshToken })
-			// } catch (error) {
-			// 	res.status(500).json({ error: error })
-			// }
+				res.json({ message: "Đăng nhập thành công.", user, accessToken, refreshToken })
+			} catch (error) {
+				res.status(500).json({ error: error })
+			}
 		},
 		refreshToken: async (req, res) => {
 			const errors = validationResult(req)
