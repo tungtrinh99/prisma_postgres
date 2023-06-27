@@ -1,5 +1,5 @@
-const router = require('./api');
+const router = require("./api")
 
 exports.routers = (app) => {
-    app.use('/', router);
+	app.use("/", router)
 }
