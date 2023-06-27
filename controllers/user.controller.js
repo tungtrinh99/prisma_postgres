@@ -60,7 +60,7 @@ exports.userController = () => {
 			}
 			const { email, password } = req.body
 
-			try {
+			// try {
 				const user = await prisma.user.findUnique({
 					where: {
 						email,
@@ -81,9 +81,9 @@ exports.userController = () => {
 				const refreshToken = generateRefreshToken(email)
 
 				res.json({ message: "Đăng nhập thành công.", user, accessToken, refreshToken })
-			} catch (error) {
-				res.status(500).json({ error: error })
-			}
+			// } catch (error) {
+			// 	res.status(500).json({ error: error })
+			// }
 		},
 		refreshToken: async (req, res) => {
 			const errors = validationResult(req)
