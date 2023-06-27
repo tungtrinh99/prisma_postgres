@@ -82,7 +82,7 @@ exports.userController = () => {
 
 				res.json({ message: "Đăng nhập thành công.", user, accessToken, refreshToken })
 			} catch (error) {
-				res.status(500).json({ error: "Đã có lỗi xảy ra." })
+				res.status(500).json({ error: error })
 			}
 		},
 		refreshToken: async (req, res) => {
